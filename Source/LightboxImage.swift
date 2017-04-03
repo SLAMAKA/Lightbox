@@ -6,6 +6,8 @@ open class LightboxImage {
   open fileprivate(set) var imageURL: URL?
   open fileprivate(set) var videoURL: URL?
   open var text: String
+    
+  open fileprivate(set) var httpHeaders: [String: String]?
 
   // MARK: - Initialization
 
@@ -15,10 +17,11 @@ open class LightboxImage {
     self.videoURL = videoURL
   }
 
-  public init(imageURL: URL, text: String = "", videoURL: URL? = nil ) {
+  public init(imageURL: URL, text: String = "", videoURL: URL? = nil, httpHeaders: [String: String]? = nil) {
     self.imageURL = imageURL
     self.text = text
     self.videoURL = videoURL
+    self.httpHeaders = httpHeaders
   }
 
   open func addImageTo(_ imageView: UIImageView, completion: ((_ image: UIImage?) -> Void)? = nil) {
@@ -26,7 +29,7 @@ open class LightboxImage {
       imageView.image = image
       completion?(image)
     } else if let imageURL = imageURL {
-      LightboxConfig.loadImage(imageView, imageURL) { error, image in
+      LightboxConfig.loadImage(imageView, imageURL, httpHeaders) { error, image in
         completion?(image)
       }
     }

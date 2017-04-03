@@ -9,9 +9,11 @@ open class LightboxConfig {
 
   open static var hideStatusBar = true
 
-  open static var loadImage: (_ imageView: UIImageView, _ URL: URL, _ completion: LoadImageCompletion?) -> Void = {
-    imageView, URL, completion in
-    let imageRequest: URLRequest = URLRequest(url: URL)
+  open static var loadImage: (_ imageView: UIImageView, _ URL: URL, _ httpHeaders: [String: String]?, _ completion: LoadImageCompletion?) -> Void = {
+    imageView, URL, httpHeaders, completion in
+        
+    var imageRequest: URLRequest = URLRequest(url: URL)
+    imageRequest.allHTTPHeaderFields = httpHeaders
 
     NSURLConnection.sendAsynchronousRequest(imageRequest,
       queue: OperationQueue.main,

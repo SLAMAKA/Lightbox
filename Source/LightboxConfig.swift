@@ -67,15 +67,114 @@ open class LightboxConfig {
     ]
   }
 
+    public struct ConversationNameLabel {
+        public static var enabled = true
+        public static var text: String = NSLocalizedString("Conversation label", comment: "")
+        
+        public static var textAttributes = [
+            NSFontAttributeName: UIFont.boldSystemFont(ofSize: 14),
+            NSForegroundColorAttributeName: UIColor.white,
+            NSParagraphStyleAttributeName: {
+                var style = NSMutableParagraphStyle()
+                style.alignment = .left
+                return style
+            }()
+        ]
+    }
+    
+    public struct SelectedFileCountLabel {
+        public static var enabled = true
+        public static var text: String = NSLocalizedString("Set File count", comment: "")
+        
+        public static var textAttributes = [
+            NSFontAttributeName: UIFont.boldSystemFont(ofSize: 14),
+            NSForegroundColorAttributeName: UIColor.white,
+            NSParagraphStyleAttributeName: {
+                var style = NSMutableParagraphStyle()
+                style.alignment = .left
+                return style
+            }()
+        ]
+    }
+    
+    public struct SendButton {
+        public static var enabled = true
+        public static var size: CGSize?
+        public static var text = NSLocalizedString("Send", comment: "")
+        public static var image: UIImage?
+        
+        public static var textAttributes = [
+            NSFontAttributeName: UIFont.boldSystemFont(ofSize: 16),
+            NSForegroundColorAttributeName: UIColor.white,
+            NSParagraphStyleAttributeName: {
+                var style = NSMutableParagraphStyle()
+                style.alignment = .center
+                return style
+            }()
+        ]
+    }
+    
+    public struct AddButton {
+        public static var enabled = true
+        public static var size: CGSize?
+        public static var text = NSLocalizedString("Add", comment: "")
+        public static var image: UIImage? 
+        
+        public static var textAttributes = [
+            NSFontAttributeName: UIFont.boldSystemFont(ofSize: 16),
+            NSForegroundColorAttributeName: UIColor.white,
+            NSParagraphStyleAttributeName: {
+                var style = NSMutableParagraphStyle()
+                style.alignment = .center
+                return style
+            }()
+        ]
+    }
+    
+    
+    public struct CancelButton {
+        public static var enabled = true
+        public static var size: CGSize?
+        public static var text = NSLocalizedString("Cancel", comment: "")
+        public static var image: UIImage?
+        
+        public static var textAttributes = [
+            NSFontAttributeName: UIFont.boldSystemFont(ofSize: 16),
+            NSForegroundColorAttributeName: UIColor.white,
+            NSParagraphStyleAttributeName: {
+                var style = NSMutableParagraphStyle()
+                style.alignment = .center
+                return style
+            }()
+        ]
+    }
+    
+    public struct MessageTextView {
+        public static var enabled = true
+        public static var size: CGSize?
+        public static var placeholderText = NSLocalizedString("Add a caption ...", comment: "")
+        public static var image: UIImage?
+        
+        public static var textAttributes = [
+            NSFontAttributeName: UIFont.boldSystemFont(ofSize: 15),
+            NSForegroundColorAttributeName: UIColor.white,
+            NSParagraphStyleAttributeName: {
+                var style = NSMutableParagraphStyle()
+                style.alignment = .center
+                return style
+            }()
+        ]
+    }
+
   public struct DeleteButton {
-    public static var enabled = false
+    public static var enabled = true
     public static var size: CGSize?
     public static var text = NSLocalizedString("Delete", comment: "")
-    public static var image: UIImage?
+    public static var image: UIImage? = UIImage.init(named: "photo_delete")
 
     public static var textAttributes = [
       NSFontAttributeName: UIFont.boldSystemFont(ofSize: 16),
-      NSForegroundColorAttributeName: UIColor(hex: "FA2F5B"),
+      NSForegroundColorAttributeName: UIColor.white,
       NSParagraphStyleAttributeName: {
         var style = NSMutableParagraphStyle()
         style.alignment = .center

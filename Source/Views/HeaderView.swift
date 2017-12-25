@@ -1,82 +1,57 @@
 import UIKit
 
 protocol HeaderViewDelegate: class {
-  func headerView(_ headerView: HeaderView, didPressDeleteButton deleteButton: UIButton)
-  func headerView(_ headerView: HeaderView, didPressCloseButton closeButton: UIButton)
+
 }
 
 open class HeaderView: UIView {
 
-  var centerTextStyle: NSMutableParagraphStyle = {
-    var style = NSMutableParagraphStyle()
-    style.alignment = .center
-    return style
-  }()
-
-  open fileprivate(set) lazy var closeButton: UIButton = { [unowned self] in
-    let title = NSAttributedString(
-      string: LightboxConfig.CloseButton.text,
-      attributes: LightboxConfig.CloseButton.textAttributes)
-
-    let button = UIButton(type: .system)
-
-    button.setAttributedTitle(title, for: UIControlState())
-
-    if let size = LightboxConfig.CloseButton.size {
-      button.frame.size = size
-    } else {
-      button.sizeToFit()
-    }
-
-    button.addTarget(self, action: #selector(closeButtonDidPress(_:)),
-      for: .touchUpInside)
-
-    if let image = LightboxConfig.CloseButton.image {
-      button.setBackgroundImage(image, for: UIControlState())
-    }
-
-    button.isHidden = !LightboxConfig.CloseButton.enabled
-
-    return button
-    }()
-
-  open fileprivate(set) lazy var deleteButton: UIButton = { [unowned self] in
-    let title = NSAttributedString(
-      string: LightboxConfig.DeleteButton.text,
-      attributes: LightboxConfig.DeleteButton.textAttributes)
-
-    let button = UIButton(type: .system)
-
-    button.setAttributedTitle(title, for: .normal)
-
-    if let size = LightboxConfig.DeleteButton.size {
-      button.frame.size = size
-    } else {
-      button.sizeToFit()
-    }
-    
-    button.addTarget(self, action: #selector(deleteButtonDidPress(_:)),
-      for: .touchUpInside)
-
-    if let image = LightboxConfig.DeleteButton.image {
-      button.setBackgroundImage(image, for: UIControlState())
-    }
-
-    button.isHidden = !LightboxConfig.DeleteButton.enabled
-
-    return button
-    }()
-
   weak var delegate: HeaderViewDelegate?
 
+    open fileprivate(set) lazy var conversationLabel: UILabel = { [unowned self] in
+        let label = UILabel.init(frame: CGRect.zero)
+        
+//        // create an NSMutableAttributedString that we'll append everything to
+//        let fullString = NSMutableAttributedString(string: "")
+//        
+//        // create our NSTextAttachment
+//        let image1Attachment = NSTextAttachment()
+//        image1Attachment.image = UIImage(named: "awesomeIcon.png")
+//        
+//        // wrap the attachment in its own attributed string so we can append it
+//        let image1String = NSAttributedString(attachment: image1Attachment)
+//        
+//        // add the NSTextAttachment wrapper to our full string, then add some more text.
+//        fullString.append(image1String)
+//        fullString.append(NSAttributedString(string: "End of text"))
+//        fullString.append(<#T##attrString: NSAttributedString##NSAttributedString#>)
+        
+        label.attributedText = NSAttributedString.init(string: LightboxConfig.ConversationNameLabel.text,
+                                                       attributes: LightboxConfig.ConversationNameLabel.textAttributes)
+        label.sizeToFit()
+        return label
+    }()
+    
+    
+    
+    
+    open fileprivate(set) lazy var fileCountLabel: UILabel = { [unowned self] in
+        let label = UILabel.init(frame: CGRect.zero)
+        label.attributedText = NSAttributedString.init(string: LightboxConfig.SelectedFileCountLabel.text,
+                                                       attributes: LightboxConfig.SelectedFileCountLabel.textAttributes)
+        label.sizeToFit()
+        return label
+        }()
+    
+    fileprivate let gradientColors = [UIColor(hex: "000000").alpha(0.48), UIColor(hex: "000000").alpha(0.48)]
+    
   // MARK: - Initializers
 
   public init() {
     super.init(frame: CGRect.zero)
-
     backgroundColor = UIColor.clear
-
-    [closeButton, deleteButton].forEach { addSubview($0) }
+    _ = self.addGradientLayer(self.gradientColors)
+    [conversationLabel, fileCountLabel].forEach { addSubview($0) }
   }
 
   public required init?(coder aDecoder: NSCoder) {
@@ -86,11 +61,11 @@ open class HeaderView: UIView {
   // MARK: - Actions
 
   func deleteButtonDidPress(_ button: UIButton) {
-    delegate?.headerView(self, didPressDeleteButton: button)
+
   }
 
   func closeButtonDidPress(_ button: UIButton) {
-    delegate?.headerView(self, didPressCloseButton: button)
+
   }
 }
 
@@ -99,9 +74,8 @@ open class HeaderView: UIView {
 extension HeaderView: LayoutConfigurable {
 
   public func configureLayout() {
-    closeButton.frame.origin = CGPoint(
-      x: bounds.width - closeButton.frame.width - 17, y: 0)
-
-    deleteButton.frame.origin = CGPoint(x: 17, y: 0)
+    self.conversationLabel.frame.origin = CGPoint.init(x: 16, y: 19)
+    self.fileCountLabel.frame.origin = CGPoint.init(x: self.bounds.width - self.fileCountLabel.bounds.width - 16, y: 19)
+    self.resizeGradientLayer()
   }
 }

@@ -43,8 +43,11 @@ class ViewController: UIViewController {
       )
     ]
     
+    LightboxConfig.SelectedFileCountLabel.text = "\(images.count)"
+    LightboxConfig.ConversationNameLabel.text = "Salem 🤡"
+    
     let controller = LightboxController(images: images)
-    controller.dynamicBackground = true
+    controller.dynamicBackground = false
     
     present(controller, animated: true, completion: nil)
   }

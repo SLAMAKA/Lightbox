@@ -90,8 +90,8 @@ open class LightboxController: UIViewController {
   open fileprivate(set) var currentPage = 0 {
     didSet {
       currentPage = min(numberOfPages - 1, max(0, currentPage))
-      footerView.updatePage(currentPage + 1, numberOfPages)
-      footerView.updateText(pageViews[currentPage].image.text)
+//      footerView.updatePage(currentPage + 1, numberOfPages)
+//      footerView.updateText(pageViews[currentPage].image.text)
 
       if currentPage == numberOfPages - 1 {
         seen = true
@@ -262,7 +262,7 @@ open class LightboxController: UIViewController {
   // MARK: - Actions
 
   func overlayViewDidTap(_ tapGestureRecognizer: UITapGestureRecognizer) {
-    footerView.expand(false)
+//    footerView.expand(false)
   }
 
   // MARK: - Layout
@@ -285,12 +285,9 @@ open class LightboxController: UIViewController {
     }
 
     let bounds = scrollView.bounds
-    let headerViewHeight = headerView.closeButton.frame.height > headerView.deleteButton.frame.height
-      ? headerView.closeButton.frame.height
-      : headerView.deleteButton.frame.height
 
-    headerView.frame = CGRect(x: 0, y: 16, width: bounds.width, height: headerViewHeight)
-    footerView.frame = CGRect(x: 0, y: 0, width: bounds.width, height: 70)
+    headerView.frame = CGRect(x: 0, y: 0, width: bounds.width, height: 98)
+    footerView.frame = CGRect(x: 0, y: 0, width: bounds.width, height: 88)
 
     [headerView, footerView].forEach { ($0 as AnyObject).configureLayout() }
 
@@ -385,39 +382,6 @@ extension LightboxController: PageViewDelegate {
 
 extension LightboxController: HeaderViewDelegate {
 
-  func headerView(_ headerView: HeaderView, didPressDeleteButton deleteButton: UIButton) {
-    deleteButton.isEnabled = false
-
-    guard numberOfPages != 1 else {
-      pageViews.removeAll()
-      self.headerView(headerView, didPressCloseButton: headerView.closeButton)
-      return
-    }
-
-    let prevIndex = currentPage
-
-    if currentPage == numberOfPages - 1 {
-      previous()
-    } else {
-      next()
-      currentPage -= 1
-    }
-
-    self.pageViews.remove(at: prevIndex).removeFromSuperview()
-
-    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-      self.configureLayout()
-      self.currentPage = Int(self.scrollView.contentOffset.x / self.screenBounds.width)
-      deleteButton.isEnabled = true
-    }
-  }
-
-  func headerView(_ headerView: HeaderView, didPressCloseButton closeButton: UIButton) {
-    closeButton.isEnabled = false
-    presented = false
-    dismissalDelegate?.lightboxControllerWillDismiss(self)
-    dismiss(animated: true, completion: nil)
-  }
 }
 
 // MARK: - FooterViewDelegate
@@ -429,7 +393,50 @@ extension LightboxController: FooterViewDelegate {
 
     UIView.animate(withDuration: 0.25, animations: {
       self.overlayView.alpha = expanded ? 1.0 : 0.0
-      self.headerView.deleteButton.alpha = expanded ? 0.0 : 1.0
-    }) 
+//      self.headerView.deleteButton.alpha = expanded ? 0.0 : 1.0
+    })
   }
+    
+    public func footerView(_ footerView: FooterView, didPressDeleteButton deleteButton: UIButton) {
+        deleteButton.isEnabled = false
+        
+        guard numberOfPages != 1 else {
+            pageViews.removeAll()
+            self.footerView(footerView, didPressCancelButton: deleteButton)
+            return
+        }
+        
+        let prevIndex = currentPage
+        
+        if currentPage == numberOfPages - 1 {
+            previous()
+        } else {
+            next()
+            currentPage -= 1
+        }
+        
+        self.pageViews.remove(at: prevIndex).removeFromSuperview()
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+            self.configureLayout()
+            self.currentPage = Int(self.scrollView.contentOffset.x / self.screenBounds.width)
+            deleteButton.isEnabled = true
+        }
+    }
+    public func footerView(_ footerView: FooterView, didPressCancelButton closeButton: UIButton) {
+        closeButton.isEnabled = false
+        presented = false
+        dismissalDelegate?.lightboxControllerWillDismiss(self)
+        dismiss(animated: true, completion: nil)
+    }
+    
+    public func footerView(_ footerView: FooterView, didPressAddButton closeButton: UIButton) {
+        
+    }
+    
+    
+    public func footerView(_ footerView: FooterView, didPressSendButton closeButton: UIButton){
+        
+    }
+
 }
